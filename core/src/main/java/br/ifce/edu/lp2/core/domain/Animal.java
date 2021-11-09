@@ -5,8 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UsuarioAdmin {
+public class Animal {
     private String id;
-    private String email;
-    private String senha;
+    private String nome;
+    private Double peso;
 }
