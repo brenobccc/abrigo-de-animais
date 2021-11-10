@@ -8,5 +8,8 @@ import lombok.Setter;
 public class RacaAnimal {
     private String id;
     private String descricao;
+
+    public RacaAnimal(String id, String descricao) {
+    }
 }
 

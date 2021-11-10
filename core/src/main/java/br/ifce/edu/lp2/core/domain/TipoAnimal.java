@@ -8,4 +8,10 @@ import lombok.Setter;
 public class TipoAnimal {
     private String id;
     private String descricao;
+
+    TipoAnimal(String id, String descricao){
+        this.id = id;
+        this.descricao = descricao;
+    }
+
 }
