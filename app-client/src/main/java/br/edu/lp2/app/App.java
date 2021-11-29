@@ -11,7 +11,7 @@ public class App {
         user.setNome("Breno");
         user.setTelefone("(88)940405080");
 
-        CreateUserPort createUserPort = new CreateUserUS();
+        CreateUserPort createUserPort = new CreateUserUS();//CREATE
 
         var id = createUserPort.apply(user);
 
