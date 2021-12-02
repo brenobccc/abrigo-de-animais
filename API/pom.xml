@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.edu.ifce.lp2</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>API_pets</name>
 	<description>Demo project for Spring Boot</description>
@@ -33,6 +33,11 @@
 			<artifactId>core</artifactId>
 			<version>1.0.0</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>br.edu.ifce.lp2</groupId>
+			<artifactId>repository</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 
