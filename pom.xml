@@ -6,11 +6,31 @@
 
     <groupId>br.edu.ifce.lp2</groupId>
     <artifactId>abrigo-de-animais</artifactId>
+    <packaging>pom</packaging>
     <version>1.0.0</version>
+    <modules>
+        <module>core</module>
+        <module>app-client</module>
+        <module>API</module>
+        <module>repository</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
+        </dependency>
+        <dependency>
+            <groupId>br.edu.ifce.lp2</groupId>
+            <artifactId>core</artifactId>
+
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 </project>
