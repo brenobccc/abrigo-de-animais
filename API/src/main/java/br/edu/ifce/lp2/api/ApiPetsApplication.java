@@ -30,7 +30,7 @@ public class ApiPetsApplication {
 		System.out.println("teste");
 
 		var user = new Usuario();
-		user.setNome("Cascona s2");
+		user.setNome("cascona test s2");
 		user.setTelefone("(88)940405080");
 
 

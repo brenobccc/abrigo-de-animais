@@ -23,7 +23,7 @@ public class SaveUserRepository implements SaveUserRepositoryPort{
     MongoOperations mongoOps;
     public SaveUserRepository(){
         ConnectionString connectionString =
-                new ConnectionString("mongodb+srv://brenob:19444@lp2-cluster-01.typfq.mongodb.net");
+                new ConnectionString("mongodb+srv://lp2:kyUyltxpItBHrQIr@lp2-cluster-01.typfq.mongodb.net/admin?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .build();
@@ -41,8 +41,10 @@ public class SaveUserRepository implements SaveUserRepositoryPort{
     @Override
     public String apply(Usuario user) {
         //operations.insert(user);
-        mongoOps.insert(user);
-        mongoOps.dropCollection("person");
+        //user.setId("2");
+        user.setNome("breno");
+        mongoOps.insert(user, "publishers3");
+        System.out.println("||||||||\n"+mongoOps.collectionExists("publisher")+"\n||||||||");
         return "client.getDatabase();";
     }
 
