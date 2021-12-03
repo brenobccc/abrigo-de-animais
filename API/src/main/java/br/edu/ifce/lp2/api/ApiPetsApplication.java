@@ -16,24 +16,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/")
 public class ApiPetsApplication {
 
-	private static SaveUserRepository repo = new SaveUserRepository();
-	private static CreateUserUS port = new CreateUserUS(repo);
+	private static final SaveUserRepository repo = new SaveUserRepository();
+	private static final CreateUserUS port = new CreateUserUS(repo);
 
-	@GetMapping
-	public String getUserAdmin(@RequestParam String nome , @RequestParam String senha) {
-		UsuarioAdmin user;
-		user = new UsuarioAdmin();
+	@PostMapping
+	public String setUserAdmin(@RequestParam String nome , @RequestParam String senha) {
+		UsuarioAdmin user = new UsuarioAdmin();
 		user.setEmail(nome);
 		user.setSenha(senha);
-		repo.apply(user);
-
-		return "testando";
+		var id = port.apply(user);
+		return id;
 	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiPetsApplication.class, args);
 		System.out.println("||||| API RUNNING |||||");
-
 	}
 
 }

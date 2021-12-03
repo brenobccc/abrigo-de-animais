@@ -13,12 +13,9 @@ public record CreateUserUS(SaveUserRepositoryPort saveUserRepositoryPort)
 
     @Override
     public String apply(UsuarioAdmin user){
-
-        //VERIFICAR SE EXISTE ALGUM COM O ID IGUAL
-        //SALVAR NO BD
-            var id = saveUserRepositoryPort.apply(user);
-            System.out.println("Salvo no Banco de Dados");
-            return id;
+        var id = saveUserRepositoryPort.apply(user);
+        System.out.println("Salvo no Banco de Dados com sucesso!");
+        return id;
     }
 
 }
