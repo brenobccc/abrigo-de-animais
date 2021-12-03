@@ -2,17 +2,24 @@ package mongodb.adapters;
 
 
 import br.ifce.edu.lp2.core.domain.Usuario;
+import br.ifce.edu.lp2.core.domain.UsuarioAdmin;
 import br.ifce.edu.lp2.core.ports.driven.repository.SaveUserRepositoryPort;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.client.ClientSession;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import org.bson.conversions.Bson;
+import org.bson.json.JsonObject;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class SaveUserRepository implements SaveUserRepositoryPort{
@@ -23,7 +30,7 @@ public class SaveUserRepository implements SaveUserRepositoryPort{
     MongoOperations mongoOps;
     public SaveUserRepository(){
         ConnectionString connectionString =
-                new ConnectionString("mongodb+srv://brenob:19444@lp2-cluster-01.typfq.mongodb.net");
+                new ConnectionString("mongodb+srv://lp2:kyUyltxpItBHrQIr@lp2-cluster-01.typfq.mongodb.net/admin?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .build();
@@ -39,15 +46,18 @@ public class SaveUserRepository implements SaveUserRepositoryPort{
 
 
     @Override
-    public String apply(Usuario user) {
-        //operations.insert(user);
-        mongoOps.insert(user);
-        mongoOps.dropCollection("person");
+    public String apply(UsuarioAdmin user) {
+        //operations.insert(user)
+        //List<UsuarioAdmin> usuarios = new ArrayList<>();
+        mongoOps.insert(user, "UsuariosAdmins");
+
+        //mongoOps.getCollection("publishers").createIndex((teste));
+        //System.out.println("||||||||\n"+mongoOps.collectionExists("publisher")+"\n||||||||");
         return "client.getDatabase();";
     }
 
     @Override
-    public String apply(String id, Usuario user) {
+    public String apply(String id, UsuarioAdmin user) {
         return null;
     }
 }

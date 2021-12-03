@@ -1,6 +1,7 @@
 package br.ifce.edu.lp2.core.us;
 
 import br.ifce.edu.lp2.core.domain.Usuario;
+import br.ifce.edu.lp2.core.domain.UsuarioAdmin;
 import br.ifce.edu.lp2.core.ports.driven.repository.SaveUserRepositoryPort;
 import br.ifce.edu.lp2.core.ports.driver.CreateUserPort;
 
@@ -9,8 +10,9 @@ import br.ifce.edu.lp2.core.ports.driver.CreateUserPort;
 public record CreateUserUS(SaveUserRepositoryPort saveUserRepositoryPort)
         implements CreateUserPort{
 
+
     @Override
-    public String apply(Usuario user){
+    public String apply(UsuarioAdmin user){
 
         //VERIFICAR SE EXISTE ALGUM COM O ID IGUAL
         //SALVAR NO BD
