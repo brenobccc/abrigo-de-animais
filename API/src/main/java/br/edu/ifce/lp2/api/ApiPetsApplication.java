@@ -1,6 +1,7 @@
 package br.edu.ifce.lp2.api;
 
 import br.ifce.edu.lp2.core.domain.Usuario;
+import br.ifce.edu.lp2.core.domain.UsuarioAdmin;
 import br.ifce.edu.lp2.core.ports.driver.CreateUserPort;
 import br.ifce.edu.lp2.core.us.CreateUserUS;
 import mongodb.adapters.SaveUserRepository;
@@ -8,41 +9,30 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @SpringBootApplication
-@RestController("/")
+@RestController
+@RequestMapping(value = "/")
 public class ApiPetsApplication {
 
+	private static SaveUserRepository repo = new SaveUserRepository();
+	private static CreateUserUS port = new CreateUserUS(repo);
 
-	/*@GetMapping(value = "nome")
-	public static String createUser(){
-
-
-
-	}*/
-
-	public static void main(String[] args) {
-
-
-		SpringApplication.run(ApiPetsApplication.class, args);
-		System.out.println("teste");
-
-		var user = new Usuario();
-		user.setNome("cascona test s2");
-		user.setTelefone("(88)940405080");
-
-
-		var repo = new SaveUserRepository();
-		var port = new CreateUserUS(repo);
-		port.apply(user);
-
+	@GetMapping
+	public String getUserAdmin(@RequestParam String nome , @RequestParam String senha) {
+		UsuarioAdmin user;
+		user = new UsuarioAdmin();
+		user.setEmail(nome);
+		user.setSenha(senha);
 		repo.apply(user);
 
+		return "testando";
+	}
 
-
-		System.out.println("nome: " + user.getNome());
+	public static void main(String[] args) {
+		SpringApplication.run(ApiPetsApplication.class, args);
+		System.out.println("||||| API RUNNING |||||");
 
 	}
 
