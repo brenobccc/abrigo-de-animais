@@ -7,6 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @SpringBootApplication
 @RestController
 @RequestMapping(value = "/")
@@ -37,6 +39,15 @@ public class ApiPetsApplication {
 		return port.applyUpdate(id,senha);
 	}
 
+	@GetMapping
+	public List<UsuarioAdmin> getUsuarios(){
+		return repo.getAll();
+	}
+
+	@GetMapping(value = "usuario/")
+	public UsuarioAdmin getUser(@RequestParam String id){
+		return repo.getUser(id);
+	}
 
 	//Funcao principal para TESTES
 	public static void main(String[] args) {

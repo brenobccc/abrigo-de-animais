@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import java.util.List;
-import java.util.Objects;
 
 public class SaveUserRepository implements SaveUserRepositoryPort{
 
@@ -56,9 +55,13 @@ public class SaveUserRepository implements SaveUserRepositoryPort{
         }
     }
 
-   /* public List<UsuarioAdmin> getAllUsers(){
+    public List<UsuarioAdmin> getAll(){
         return mongoOps.findAll(UsuarioAdmin.class, "UsuariosAdmins" );
-    }*/
+    }
+
+    public UsuarioAdmin getUser(String _id){
+        return mongoOps.findById(_id, UsuarioAdmin.class, "UsuariosAdmins");
+    }
 
     //Funcao para ALTERAR usuário
     public String applyUpdate(String _id, String senha){
