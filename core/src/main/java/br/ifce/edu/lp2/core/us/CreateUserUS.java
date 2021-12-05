@@ -22,8 +22,11 @@ public record CreateUserUS(SaveUserRepositoryPort saveUserRepositoryPort)
     //public List<UsuarioAdmin> getUsers(){
 //   // }
     //Deletar
-    public String apply(String id, String senha){
-        return saveUserRepositoryPort.apply(id,senha);
+    public String apply(String id){
+        return saveUserRepositoryPort.apply(id);
     }
 
+    public String applyUpdate(String id, String senha){
+        return saveUserRepositoryPort.applyUpdate(id,senha);
+    }
 }

@@ -7,8 +7,6 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.mongodb.internal.operation.UpdateOperation;
-import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,14 +15,13 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 
 public class SaveUserRepository implements SaveUserRepositoryPort{
 
     private final MongoClient client;
     MongoOperations mongoOps;
 
+    //Cria a conexão com o banco de dados MONGODB
     public SaveUserRepository(){
         ConnectionString connectionString =
                 new ConnectionString("mongodb+srv://lp2:kyUyltxpItBHrQIr@lp2-cluster-01.typfq.mongodb.net/admin?retryWrites=true&w=majority");
@@ -37,49 +34,57 @@ public class SaveUserRepository implements SaveUserRepositoryPort{
     }
 
 
-    @Override
+    @Override//Cria o usuário
     public String apply(UsuarioAdmin user) {
         List<UsuarioAdmin> list = mongoOps.findAll(UsuarioAdmin.class, "UsuariosAdmins" );
+        boolean controll = false;//verificador se existe email cadastrado
 
-
-        boolean controll = false;
-
+        //percorre a lista e verfica se o email passado já está cadastrado
         for(UsuarioAdmin admin : list){
            if(admin.getEmail().equals(user.getEmail())) {
+               //se tiver ele irá setar o controll como "true"
                controll = true;
            }
         }
-
-
-       /* list.stream().map((usuario)->{
-            System.out.println(usuario.getEmail());
-            return null;
-        });*/
-
-        if(controll){
+        if(controll){//se controll for true, é porque tem um email igual cadastrado
             System.out.println("email já está cadastrado");
             return "email já está cadastrado";
-        }else{
+        }else{//Se não, irá ser permitido inserir o novo user no MOGODB
             var usuarioAdmin = mongoOps.insert(user, "UsuariosAdmins");
             System.out.println("Salvo no Banco de Dados com sucesso!");
             return usuarioAdmin.getId();
         }
-
     }
 
    /* public List<UsuarioAdmin> getAllUsers(){
         return mongoOps.findAll(UsuarioAdmin.class, "UsuariosAdmins" );
     }*/
 
-    @Override
-    public String apply(String _id, String senha) {
-        Query query = Query.query(Criteria.where("_id").is(_id));
-
+    //Funcao para ALTERAR usuário
+    public String applyUpdate(String _id, String senha){
+        Query query = Query.query(Criteria.where("_id").is(_id));//query para filtro
+        Update update = new Update();
+        update.set("senha",senha);
+        //se ele encontrar algo, irá entrar na condicao
         if(mongoOps.findById(_id, UsuarioAdmin.class, "UsuariosAdmins") != null){
-            mongoOps.findAndRemove( query, UsuarioAdmin.class, "UsuariosAdmins");
-            return "Usuário excluido com sucesso";
+            //irá encontrar e remover o osuário segundo a condição(query de _id = id);
+            mongoOps.findAndModify( query, update,UsuarioAdmin.class, "UsuariosAdmins");
+            return "Usuário alterado com sucesso";//mensagem de sucesso
         }
-        return "Usuário não encontrado!!";
+        return "Usuário não existe";
+    }
+
+    @Override//Função para DELETAR usuário
+    public String apply(String _id) {
+        Query query = Query.query(Criteria.where("_id").is(_id));//query para filtro
+
+        //se ele encontrar algo, irá entrar na condicao
+        if(mongoOps.findById(_id, UsuarioAdmin.class, "UsuariosAdmins") != null){
+            //irá encontrar e remover o osuário segundo a condição(query de _id = id);
+            mongoOps.findAndRemove( query, UsuarioAdmin.class, "UsuariosAdmins");
+            return "Usuário excluido com sucesso";//mensagem de sucesso
+        }
+        return "Usuário não encontrado!!";//mensagem de falha
     }
 
 
