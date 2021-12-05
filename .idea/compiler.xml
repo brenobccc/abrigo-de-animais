@@ -9,13 +9,13 @@
         <outputRelativeToContentRoot value="true" />
         <module name="core" />
         <module name="API" />
-        <module name="app-client" />
         <module name="repository" />
         <module name="demo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="API" target="16" />
+      <module name="app-client" target="16" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
