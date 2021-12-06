@@ -3,6 +3,7 @@ package mongodb.adapters;
 import br.ifce.edu.lp2.core.domain.Animal;
 import br.ifce.edu.lp2.core.domain.Status;
 import br.ifce.edu.lp2.core.domain.Usuario;
+import br.ifce.edu.lp2.core.domain.UsuarioAdmin;
 import br.ifce.edu.lp2.core.ports.driven.repository.SaveAnimalRepositoryPort;
 import br.ifce.edu.lp2.core.ports.driven.repository.SaveUserRepositoryPort;
 import com.mongodb.ConnectionString;
@@ -41,6 +42,17 @@ public class SaveAnimalRepository implements SaveAnimalRepositoryPort {
         return  pet.getId();
     }
 
+
+
+    public List<Animal> getAll(){
+        return mongoOps.findAll(Animal.class, "Animais" );
+    }
+
+    public Animal getAnimal(String id){
+        return mongoOps.findById(id,Animal.class, "Animais" );
+    }
+
+    //Adotar
     public String apply(String id_animal, String id_usuario) {
         Usuario usuario = mongoOps.findById(id_usuario, Usuario.class, "Usuarios");
         Animal animal = mongoOps.findById(id_animal, Animal.class, "Animais");

@@ -42,6 +42,17 @@ public class AnimalController {
         // se foi cadastrado com sucesso ou não.
     }
 
+
+    @GetMapping(value = "animal/")//Deletando o usuário
+    public Animal getAnimal(@RequestParam String id_animal) {
+        return port.getAnimal(id_animal);//Retorna uma mensagem informando
+    }
+
+    @GetMapping//Deletando o usuário
+    public List<Animal> getAll() {
+        return port.getAll();//Retorna uma mensagem informando
+    }
+
     /*@PutMapping//atualizando usuario
     public String updateUserAdmin(@RequestParam String id, @RequestParam String senha){
         return port.applyUpdate(id,senha);

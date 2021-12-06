@@ -45,27 +45,6 @@ public class UserController {
     public Usuario getUser(@RequestParam String id){
         return repo.getUser(id);
     }
-
-    /*@DeleteMapping//Deletando o usuário
-    public String deleteUserAdmin(@RequestParam String id) {
-        return port.apply(id);//Retorna uma mensagem informando
-        // se foi cadastrado com sucesso ou não.
-    }*/
-
-    /*@PutMapping//atualizando usuario
-    public String updateUserAdmin(@RequestParam String id, @RequestParam String senha){
-        return port.applyUpdate(id,senha);
-    }
-
-    @GetMapping
-    public List<UsuarioAdmin> getUsuarios(){
-        return repo.getAll();
-    }
-
-    @GetMapping(value = "usuario/")
-    public UsuarioAdmin getUser(@RequestParam String id){
-        return repo.getUser(id);
-    }*/
 }
 
 

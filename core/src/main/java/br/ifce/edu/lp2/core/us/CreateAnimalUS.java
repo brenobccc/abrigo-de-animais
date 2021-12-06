@@ -26,6 +26,14 @@ public record CreateAnimalUS(SaveAnimalRepositoryPort saveAnimalRepositoryPort)
         return id;
     }
 
+    public List<Animal> getAll(){
+        return saveAnimalRepositoryPort.getAll();
+    }
+
+    public Animal getAnimal(String id){
+        return saveAnimalRepositoryPort.getAnimal(id);
+    }
+
 
     /*
     public List<Usuario> getUsers(){

@@ -57,41 +57,7 @@ public class SaveUserRepository implements SaveUserRepositoryPort {
         return mongoOps.findAll(Usuario.class, "Usuarios" );
     }
 
-    public Usuario getUser(String _id){
+     public Usuario getUser(String _id){
         return mongoOps.findById(_id, Usuario.class, "Usuarios");
     }
- /*
-
-    public UsuarioAdmin getUser(String _id){
-        return mongoOps.findById(_id, UsuarioAdmin.class, "UsuariosAdmins");
-    }
-
-    //Funcao para ALTERAR usuário
-    public String applyUpdate(String _id, String senha){
-        Query query = Query.query(Criteria.where("_id").is(_id));//query para filtro
-        Update update = new Update();
-        update.set("senha",senha);
-        //se ele encontrar algo, irá entrar na condicao
-        if(mongoOps.findById(_id, UsuarioAdmin.class, "UsuariosAdmins") != null){
-            //irá encontrar e remover o osuário segundo a condição(query de _id = id);
-            mongoOps.findAndModify( query, update,UsuarioAdmin.class, "UsuariosAdmins");
-            return "Usuário alterado com sucesso";//mensagem de sucesso
-        }
-        return "Usuário não existe";
-    }
-
-    @Override//Função para DELETAR usuário
-    public String apply(String _id) {
-        Query query = Query.query(Criteria.where("_id").is(_id));//query para filtro
-
-        //se ele encontrar algo, irá entrar na condicao
-        if(mongoOps.findById(_id, UsuarioAdmin.class, "UsuariosAdmins") != null){
-            //irá encontrar e remover o osuário segundo a condição(query de _id = id);
-            mongoOps.findAndRemove( query, UsuarioAdmin.class, "UsuariosAdmins");
-            return "Usuário excluido com sucesso";//mensagem de sucesso
-        }
-        return "Usuário não encontrado!!";//mensagem de falha
-    }
-
-    */
 }

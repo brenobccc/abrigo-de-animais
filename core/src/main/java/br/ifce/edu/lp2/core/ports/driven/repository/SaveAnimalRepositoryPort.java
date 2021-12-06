@@ -10,5 +10,6 @@ public interface SaveAnimalRepositoryPort {
     //cadastro o cliente e retorno o id
     String apply(Animal animal);
     String apply(String id_animal, String id_usuario);
-
+    List<Animal> getAll();
+    Animal getAnimal(String id);
 }
