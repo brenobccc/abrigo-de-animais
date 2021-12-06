@@ -1,7 +1,9 @@
 package mongodb.adapters;
 
+import br.ifce.edu.lp2.core.domain.Animal;
+import br.ifce.edu.lp2.core.domain.Status;
 import br.ifce.edu.lp2.core.domain.Usuario;
-import br.ifce.edu.lp2.core.ports.driven.repository.SaveUserAdminRepositoryPort;
+import br.ifce.edu.lp2.core.ports.driven.repository.SaveAnimalRepositoryPort;
 import br.ifce.edu.lp2.core.ports.driven.repository.SaveUserRepositoryPort;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -9,16 +11,20 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.core.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SaveUserRepository implements SaveUserRepositoryPort {
+public class SaveAnimalRepository implements SaveAnimalRepositoryPort {
 
     private final MongoClient client;
     MongoOperations mongoOps;
 
     //Cria a conexão com o banco de dados MONGODB
-    public SaveUserRepository(){
+    public SaveAnimalRepository(){
         ConnectionString connectionString =
                 new ConnectionString("mongodb+srv://lp2:kyUyltxpItBHrQIr@lp2-cluster-01.typfq.mongodb.net/admin?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings.builder()
@@ -30,36 +36,41 @@ public class SaveUserRepository implements SaveUserRepositoryPort {
     }
 
         //Cria
-    @Override
-    public String apply(Usuario user) {
-        List<Usuario> list = mongoOps.findAll(Usuario.class, "Usuarios" );
-        boolean controll = false;//verificador se existe email cadastrado
+    public String apply(Animal animal) {
+        var pet = mongoOps.insert(animal, "Animais");
+        return  pet.getId();
+    }
 
-        //percorre a lista e verfica se o email passado já está cadastrado
-        for(Usuario admin : list){
-            if(admin.getNome().equals(user.getNome())) {
-                //se tiver ele irá setar o controll como "true"
-                controll = true;
-            }
+    public String apply(String id_animal, String id_usuario) {
+        Usuario usuario = mongoOps.findById(id_usuario, Usuario.class, "Usuarios");
+        Animal animal = mongoOps.findById(id_animal, Animal.class, "Animais");
+
+        if(usuario!=null && animal!=null && !animal.getStatus_animal().equals(Status.ADOTADO)){
+            List<Animal> lista = new ArrayList<Animal>();
+            animal.setStatus_animal(animal.verificarStatus(3));
+            lista.add(animal);
+
+            Update update_animal = new Update();
+            update_animal.set("Animais",lista);
+
+            Update update_animal_status = new Update();
+            update_animal_status.set("status_animal", "ADOTADO");
+            mongoOps.findAndModify(new Query(Criteria.where("_id").is(id_animal)), update_animal_status, Animal.class, "Animais");
+            mongoOps.findAndModify(new Query(Criteria.where("_id").is(id_usuario)), update_animal, Usuario.class, "Usuarios");
+
+            return " Adotado por:"+usuario.getNome()+" ";
         }
-        if(controll){//se controll for true, é porque tem um email igual cadastrado
-            System.out.println("Usuario já está cadastrado");
-            return "Usuario já está cadastrado";
-        }else{//Se não, irá ser permitido inserir o novo user no MOGODB
-            var usuario = mongoOps.insert(user, "Usuarios");
-            System.out.println("Salvo no Banco de Dados com sucesso!");
-            return usuario.getId();
-        }
+        return "Dados inválidos";
     }
 
 
-     public List<Usuario> getAll(){
-        return mongoOps.findAll(Usuario.class, "Usuarios" );
+ /*    public List<Animal> getAll(){
+        return mongoOps.findAll(Animal.class, "Usuarios" );
     }
 
     public Usuario getUser(String _id){
-        return mongoOps.findById(_id, Usuario.class, "Usuarios");
-    }
+        return mongoOps.findById(_id, Animal.class, "Usuarios");
+    }*/
  /*
 
     public UsuarioAdmin getUser(String _id){

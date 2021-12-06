@@ -1,28 +1,33 @@
 package br.ifce.edu.lp2.core.us;
 
+import br.ifce.edu.lp2.core.domain.Animal;
 import br.ifce.edu.lp2.core.domain.Usuario;
-import br.ifce.edu.lp2.core.domain.UsuarioAdmin;
-import br.ifce.edu.lp2.core.ports.driven.repository.SaveUserAdminRepositoryPort;
+import br.ifce.edu.lp2.core.ports.driven.repository.SaveAnimalRepositoryPort;
 import br.ifce.edu.lp2.core.ports.driven.repository.SaveUserRepositoryPort;
-import br.ifce.edu.lp2.core.ports.driver.CreateUserAdminPort;
+import br.ifce.edu.lp2.core.ports.driver.CreateAnimalPort;
 import br.ifce.edu.lp2.core.ports.driver.CreateUserPort;
 
 import java.util.List;
 
 //Cria uma história de usuário
 
-public record CreateUserUS(SaveUserRepositoryPort saveUserRepositoryPort)
-        implements CreateUserPort {
+public record CreateAnimalUS(SaveAnimalRepositoryPort saveAnimalRepositoryPort)
+        implements CreateAnimalPort {
 
 
-    @Override//Inserir
-    public String apply(Usuario user){
-        var id = saveUserRepositoryPort.apply(user);
+    @Override//Doar animal
+    public String apply(Animal animal){
+        var id = saveAnimalRepositoryPort.apply(animal);
+        return id;
+    }
+
+    public String apply(String id_animal, String id_usuario){
+        var id = saveAnimalRepositoryPort.apply(id_animal,id_usuario);
         return id;
     }
 
 
-
+    /*
     public List<Usuario> getUsers(){
         return saveUserRepositoryPort.getAll();
     }
@@ -30,7 +35,7 @@ public record CreateUserUS(SaveUserRepositoryPort saveUserRepositoryPort)
     public Usuario getUser(String id){
         return saveUserRepositoryPort.getUser(id);
     }
-
+    */
 
     //public List<UsuarioAdmin> getUsers(){
 //   // }
