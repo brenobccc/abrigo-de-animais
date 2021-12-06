@@ -10,6 +10,8 @@ public class RacaAnimal {
     private String descricao;
 
     public RacaAnimal(String id, String descricao) {
+        this.id = id;
+        this.descricao = descricao;
     }
 }
 

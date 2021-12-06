@@ -1,22 +1,18 @@
 package mongodb.adapters;
 
-import br.ifce.edu.lp2.core.domain.UsuarioAdmin;
+import br.ifce.edu.lp2.core.domain.Usuario;
+import br.ifce.edu.lp2.core.ports.driven.repository.SaveUserAdminRepositoryPort;
 import br.ifce.edu.lp2.core.ports.driven.repository.SaveUserRepositoryPort;
-
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 
 import java.util.List;
-import java.util.Objects;
 
-public class SaveUserRepository implements SaveUserRepositoryPort{
+public class SaveUserRepository implements SaveUserRepositoryPort {
 
     private final MongoClient client;
     MongoOperations mongoOps;
@@ -33,59 +29,35 @@ public class SaveUserRepository implements SaveUserRepositoryPort{
         mongoOps = new MongoTemplate(client, "lp2");
     }
 
-
-    @Override//Cria o usuário
-    public String apply(UsuarioAdmin user) {
-        List<UsuarioAdmin> list = mongoOps.findAll(UsuarioAdmin.class, "UsuariosAdmins" );
+        //Cria
+    @Override
+    public String apply(Usuario user) {
+        List<Usuario> list = mongoOps.findAll(Usuario.class, "Usuarios" );
         boolean controll = false;//verificador se existe email cadastrado
 
         //percorre a lista e verfica se o email passado já está cadastrado
-        for(UsuarioAdmin admin : list){
-           if(admin.getEmail().equals(user.getEmail())) {
-               //se tiver ele irá setar o controll como "true"
-               controll = true;
-           }
+        for(Usuario admin : list){
+            if(admin.getNome().equals(user.getNome())) {
+                //se tiver ele irá setar o controll como "true"
+                controll = true;
+            }
         }
         if(controll){//se controll for true, é porque tem um email igual cadastrado
-            System.out.println("email já está cadastrado");
-            return "email já está cadastrado";
+            System.out.println("Usuario já está cadastrado");
+            return "Usuario já está cadastrado";
         }else{//Se não, irá ser permitido inserir o novo user no MOGODB
-            var usuarioAdmin = mongoOps.insert(user, "UsuariosAdmins");
+            var usuario = mongoOps.insert(user, "Usuarios");
             System.out.println("Salvo no Banco de Dados com sucesso!");
-            return usuarioAdmin.getId();
+            return usuario.getId();
         }
     }
 
-   /* public List<UsuarioAdmin> getAllUsers(){
-        return mongoOps.findAll(UsuarioAdmin.class, "UsuariosAdmins" );
-    }*/
 
-    //Funcao para ALTERAR usuário
-    public String applyUpdate(String _id, String senha){
-        Query query = Query.query(Criteria.where("_id").is(_id));//query para filtro
-        Update update = new Update();
-        update.set("senha",senha);
-        //se ele encontrar algo, irá entrar na condicao
-        if(mongoOps.findById(_id, UsuarioAdmin.class, "UsuariosAdmins") != null){
-            //irá encontrar e remover o osuário segundo a condição(query de _id = id);
-            mongoOps.findAndModify( query, update,UsuarioAdmin.class, "UsuariosAdmins");
-            return "Usuário alterado com sucesso";//mensagem de sucesso
-        }
-        return "Usuário não existe";
+     public List<Usuario> getAll(){
+        return mongoOps.findAll(Usuario.class, "Usuarios" );
     }
 
-    @Override//Função para DELETAR usuário
-    public String apply(String _id) {
-        Query query = Query.query(Criteria.where("_id").is(_id));//query para filtro
-
-        //se ele encontrar algo, irá entrar na condicao
-        if(mongoOps.findById(_id, UsuarioAdmin.class, "UsuariosAdmins") != null){
-            //irá encontrar e remover o osuário segundo a condição(query de _id = id);
-            mongoOps.findAndRemove( query, UsuarioAdmin.class, "UsuariosAdmins");
-            return "Usuário excluido com sucesso";//mensagem de sucesso
-        }
-        return "Usuário não encontrado!!";//mensagem de falha
+     public Usuario getUser(String _id){
+        return mongoOps.findById(_id, Usuario.class, "Usuarios");
     }
-
-
 }
