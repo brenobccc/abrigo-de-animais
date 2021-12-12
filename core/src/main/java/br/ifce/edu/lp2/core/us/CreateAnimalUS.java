@@ -26,12 +26,21 @@ public record CreateAnimalUS(SaveAnimalRepositoryPort saveAnimalRepositoryPort)
         return id;
     }
 
+    public String devolverAnimal(String id_animal, String id_usuario){
+        var id = saveAnimalRepositoryPort.devolverAnimal(id_animal,id_usuario);
+        return id;
+    }
+
     public List<Animal> getAll(){
         return saveAnimalRepositoryPort.getAll();
     }
 
     public Animal getAnimal(String id){
         return saveAnimalRepositoryPort.getAnimal(id);
+    }
+
+    public String applyDelete(String id){
+        return saveAnimalRepositoryPort.applyDelete(id);
     }
 
 

@@ -43,6 +43,14 @@ public class AnimalController {
     }
 
 
+    @PutMapping(value = "devolveranimal/")
+    public String devolverAnimal(@RequestParam String id_animal, @RequestParam String id_usuario) {
+        return port.devolverAnimal(id_animal, id_usuario);//Retorna uma mensagem informando
+        // se foi cadastrado com sucesso ou não.
+    }
+
+
+
     @GetMapping(value = "animal/")//Deletando o usuário
     public Animal getAnimal(@RequestParam String id_animal) {
         return port.getAnimal(id_animal);//Retorna uma mensagem informando
@@ -53,6 +61,10 @@ public class AnimalController {
         return port.getAll();//Retorna uma mensagem informando
     }
 
+    @DeleteMapping
+    public String applyDelete(@RequestParam String id){
+        return port.applyDelete(id);
+    }
     /*@PutMapping//atualizando usuario
     public String updateUserAdmin(@RequestParam String id, @RequestParam String senha){
         return port.applyUpdate(id,senha);

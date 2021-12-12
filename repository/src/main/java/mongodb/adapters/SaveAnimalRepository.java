@@ -16,7 +16,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.core.query.Query;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SaveAnimalRepository implements SaveAnimalRepositoryPort {
@@ -76,6 +78,80 @@ public class SaveAnimalRepository implements SaveAnimalRepositoryPort {
     }
 
 
+    public String devolverAnimal(String id_animal, String id_usuario) {
+        Usuario usuario = mongoOps.findById(id_usuario, Usuario.class, "Usuarios");
+        Animal animal = mongoOps.findById(id_animal, Animal.class, "Animais");
+
+        if(usuario!=null && animal!=null && animal.getStatus_animal().equals(Status.ADOTADO)){
+            List<Animal> arrayAnimais = usuario.getAnimais();
+            boolean animal_exist = false;
+            Animal animal_reservar = null;
+            int index = 1;
+            int index_personalizado =0;
+            for(Animal pet : arrayAnimais) {
+
+                if (pet.getId().equals(id_animal)) {
+                    animal_exist = true;
+                  //  animal_reservar = pet;
+                    index_personalizado = index;
+                    System.out.println("acheiiiiiii o " + pet.getNome());
+                }
+
+                index = index+1;
+            }
+            if(animal_exist){
+                Animal am = mongoOps.findById(id_animal, Animal.class, "Animais");
+                Query query = Query.query(Criteria.where("_id").is(id_animal));//query para filtro
+                Query query_usuario = Query.query(Criteria.where("_id").is(id_usuario));
+                Update update = new Update();
+                update.set("status_animal",Status.DISPONIVEL);
+               /* System.out.println("index:"+index_personalizado);
+                System.out.println("array"+ Arrays.toString(arrayAnimais.toArray()));
+                System.out.println("birrrl o " + arrayAnimais.toString());
+                System.out.println("2"+arrayAnimais.size());*/
+                arrayAnimais.remove(index_personalizado-1);
+               /* System.out.println("birrrl o " + arrayAnimais.toString());
+                System.out.println("2"+arrayAnimais.size());
+*/
+
+                Update update2 = new Update();
+                update2.set("Animais",arrayAnimais);
+                mongoOps.findAndModify( query, update,Animal.class, "Animais");
+                mongoOps.findAndModify( query_usuario, update2,Usuario.class, "Usuarios");
+                return "Animal devolvido com sucesso";
+            }else{
+                return "O usuário: "+usuario.getNome()+", com o ID: "+usuario.getId()+
+                        ", Não contem o animal "+ animal.getId()+" na sua lista";
+            }
+
+
+        }
+        return "Dados inválidos";
+    }
+
+
+
+
+
+
+    //DELETAR
+    public String applyDelete(String _id) {
+
+        Animal animal = mongoOps.findById(_id, Animal.class, "Animais");
+        Query query = Query.query(Criteria.where("_id").is(_id));//query para filtro
+        if (animal != null) {
+            if (animal.getStatus_animal() != Status.ADOTADO) {
+                mongoOps.findAndRemove(query, Animal.class, "Animais");
+                return "Animal " + animal.getNome() + " com o id " + animal.getId() + " foi excluido com sucesso.";
+            } else {
+                return "Exclusão inválida! O animal está Adotado e só pode ser excluido em caso de devolvimento do pet";
+            }
+        }
+        return "Animal não encontrado";
+    }
+}
+
+
  /*    public List<Animal> getAll(){
         return mongoOps.findAll(Animal.class, "Usuarios" );
     }
@@ -117,4 +193,3 @@ public class SaveAnimalRepository implements SaveAnimalRepositoryPort {
     }
 
     */
-}
