@@ -72,9 +72,9 @@ public class SaveUserAdminRepository implements SaveUserAdminRepositoryPort {
         if(mongoOps.findById(_id, UsuarioAdmin.class, "UsuariosAdmins") != null){
             //irá encontrar e remover o osuário segundo a condição(query de _id = id);
             mongoOps.findAndModify( query, update,UsuarioAdmin.class, "UsuariosAdmins");
-            return "Usuário alterado com sucesso";//mensagem de sucesso
+            return "Usuário Admin alterado com sucesso";//mensagem de sucesso
         }
-        return "Usuário não existe";
+        return "Usuário Admin não existe";
     }
 
     @Override//Função para DELETAR usuário
@@ -85,9 +85,9 @@ public class SaveUserAdminRepository implements SaveUserAdminRepositoryPort {
         if(mongoOps.findById(_id, UsuarioAdmin.class, "UsuariosAdmins") != null){
             //irá encontrar e remover o osuário segundo a condição(query de _id = id);
             mongoOps.findAndRemove( query, UsuarioAdmin.class, "UsuariosAdmins");
-            return "Usuário excluido com sucesso";//mensagem de sucesso
+            return "Usuário Admin excluido com sucesso";//mensagem de sucesso
         }
-        return "Usuário não encontrado!!";//mensagem de falha
+        return "Usuário Admin não encontrado!!";//mensagem de falha
     }
 
 

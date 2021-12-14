@@ -1,6 +1,8 @@
 package mongodb.adapters;
 
+import br.ifce.edu.lp2.core.domain.Animal;
 import br.ifce.edu.lp2.core.domain.Usuario;
+import br.ifce.edu.lp2.core.domain.UsuarioAdmin;
 import br.ifce.edu.lp2.core.ports.driven.repository.SaveUserAdminRepositoryPort;
 import br.ifce.edu.lp2.core.ports.driven.repository.SaveUserRepositoryPort;
 import com.mongodb.ConnectionString;
@@ -9,7 +11,12 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SaveUserRepository implements SaveUserRepositoryPort {
@@ -59,5 +66,42 @@ public class SaveUserRepository implements SaveUserRepositoryPort {
 
      public Usuario getUser(String _id){
         return mongoOps.findById(_id, Usuario.class, "Usuarios");
+    }
+
+    public String applyUpdate(String _id, String senha){
+        Query query = Query.query(Criteria.where("_id").is(_id));//query para filtro
+        Update update = new Update();
+        update.set("senha",senha);
+        //se ele encontrar algo, irá entrar na condicao
+        if(mongoOps.findById(_id, Usuario.class, "Usuarios") != null){
+            //irá encontrar e remover o osuário segundo a condição(query de _id = id);
+            mongoOps.findAndModify( query, update,UsuarioAdmin.class, "Usuarios");
+            return "Usuário alterado com sucesso";//mensagem de sucesso
+        }
+        return "Usuário não existe";
+    }
+
+    public String delete(String _id){
+        Query query = Query.query(Criteria.where("_id").is(_id));//query para filtro
+
+        /*if((animals.size()==0)||(animals ==null)){
+            return "nulo";
+        }*/
+
+        //se ele encontrar algo, irá entrar na condicao
+        if(mongoOps.findById(_id, Usuario.class, "Usuarios") != null){
+            //irá encontrar e remover o osuário segundo a condição(query de _id = id);
+            var animals = (mongoOps.findById(_id, Usuario.class, "Usuarios").getAnimais() == null) ? new ArrayList<Animal>() : mongoOps.findById(_id, Usuario.class, "Usuarios").getAnimais();
+
+            if((animals.size()==0)) {
+                mongoOps.findAndRemove( query, Usuario.class, "Usuarios");
+            }else{
+                return "O usuario ainda contém animais cadastrados";
+            }
+
+            return "Usuário excluido com sucesso";//mensagem de sucesso
+        }
+        return "Usuário não encontrado!!";//mensagem de falha*/
+        //return "teste";
     }
 }

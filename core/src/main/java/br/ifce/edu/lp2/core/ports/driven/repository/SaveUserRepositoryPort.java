@@ -9,8 +9,10 @@ import java.util.List;
 public interface SaveUserRepositoryPort {
     //cadastro o cliente e retorno o id
     String apply(Usuario user);
+    String delete(String id);
     List<Usuario> getAll();
     Usuario getUser(String id);
+    String applyUpdate(String id, String senha);
    /* String apply(UsuarioAdmin user);
     String apply(String id);
     String applyUpdate(String id, String senha);

@@ -45,6 +45,17 @@ public class UserController {
     public Usuario getUser(@RequestParam String id){
         return repo.getUser(id);
     }
+
+    @PutMapping//atualizando usuario
+    public String update(@RequestParam String id, @RequestParam String senha){
+        return port.applyUpdate(id,senha);
+    }
+
+    @DeleteMapping//Deletando o usuário
+    public String deleteUser(@RequestParam String id) {
+        return port.delete(id);//Retorna uma mensagem informando
+        // se foi cadastrado com sucesso ou não.
+    }
 }
 
 
